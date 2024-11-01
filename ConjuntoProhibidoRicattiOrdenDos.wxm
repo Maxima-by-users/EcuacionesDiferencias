@@ -1,0 +1,135 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* Título: Conjuntos prohibidos de la ecuación de Riccati de
+orden 2 */
+/* Descripción: dibujamos cuatro familias de hipérbolas
+correspondientes a los conjunto prohibidos de la EDR de
+Riccati de segundo orden */
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Caso discri<0 */
+/* Coeficientes de la ecuación */
+a:-2$
+b:1$
+c:1$
+/* Cálculo de las tres raíces reales */
+raices:algsys([x^3-a*x^2-b*x-c=0],[x])$
+r:subst(raices[1],x)$
+s:subst(raices[2],x)$
+t:subst(raices[3],x)$
+/* Coeficientes de las hipérbolas */
+coef_uno(k):=r^(k+2)*(s-t)+s^(k+2)*(t-r)+t^(k+2)*(r-s)$
+coef_dos(k):=r^(k+2)*(t^2-s^2)+s^(k+2)*(r^2-t^2)+t^(k+2)*(s^2-r^2)$
+coef_tres(k):=r^(k+2)*s*t*(s-t)+s^(k+2)*r*t*(t-r)+t^(k+2)*r*s*(r-s)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Dibujo de hipérbolas */
+funcionImplicita(expresion):=implicit(expresion,x,-xRango,xRango,y,-yRango,yRango)$
+load(draw)$
+xRango:5$
+yRango:5$
+nCurvas:10$
+listaHiperbolas:makelist(coef_uno(k)*x*y+coef_dos(k)*x+coef_tres(k)=0,k,1,nCurvas)$
+draw2d(
+    title="i",
+    maplist(funcionImplicita,listaHiperbolas)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Caso discri=0 y criterio_bis=0*/
+/* Coeficientes de la ecuación */
+a:1$
+b:-1/3$
+c:1/27$
+/* En este caso los coeficientes solo dependen de "a" */
+coef_uno(k):=(k+1)*(k+2)$
+coef_dos(k):=(-2*a*k*(k+2))/3$
+coef_tres(k):=(a^2*k*(k+1))/9$
+/* Dibujo de las hipérbolas */
+funcionImplicita(expresion):=implicit(expresion,x,-xRango,xRango,y,-yRango,yRango)$
+load(draw)$
+xRango:2$
+yRango:2$
+nCurvas:50$
+listaHiperbolas:makelist(coef_uno(k)*x*y+coef_dos(k)*x+coef_tres(k)=0,k,1,nCurvas)$
+draw2d(
+    title="ii",
+    maplist(funcionImplicita,listaHiperbolas)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Caso discri=0 y criterio_bis no nulo */
+/* Coeficientes de la ecuación */
+a:-1$
+b:1$
+c:1$
+/* Raíz simple */
+s:1$
+/* Raíz doble */
+r:-1$
+/* Coeficientes de las hipérbolas */
+coef_uno(k):=s^(k+2)+r^(k+1)*((k+1)*r-(k+2)*s)$
+coef_dos(k):=-2*r*s^(k+2)+r^(k+1)*(-k*r^2+(k+2)*s^2)$
+coef_tres(k):=r^2*s^(k+2)+r^(k+2)*(k*s*(r-s)-s^2)$
+/* Dibujo de las hipérbolas */
+funcionImplicita(expresion):=implicit(expresion,x,-xRango,xRango,y,-yRango,yRango)$
+load(draw)$
+xRango:5$
+yRango:5$
+nCurvas:100$
+listaHiperbolas:makelist(coef_uno(k)*x*y+coef_dos(k)*x+coef_tres(k)=0,k,1,nCurvas)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+draw2d(
+    title="iii",
+    maplist(funcionImplicita,listaHiperbolas)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Caso discri>0 */
+/* Partimos de módulo y argumento de una de las raíces
+complejas conjugadas */
+r:1$
+t:1/7$
+/* Raíz real */
+s:1$
+/* Coeficientes de las hipérbolas */
+coef_uno(k):=s^(k+2)*sin(t)+r^(k+1)*(r*sin((k+1)*t)-s*sin((k+2)*t))$
+coef_dos(k):=-r*s^(k+2)*sin(2*t)+r^(k+1)*(s^2*sin((k+2)*t)-r^2*sin(k*t))$
+coef_tres(k):=r^2*s^(k+2)*sin(t)-s*r^(k+2)*(s*sin((k+1)*t)-r*sin(k*t))$
+funcionImplicita(expresion):=implicit(expresion,x,-xRango,xRango,y,-yRango,yRango)$
+load(draw)$
+xRango:5$
+yRango:5$
+nCurvas:50$
+listaHiperbolas:makelist(coef_uno(k)*x*y+coef_dos(k)*x+
+coef_tres(k)=0,k,1,nCurvas)$
+draw2d(
+    title="iv",
+    maplist(funcionImplicita,listaHiperbolas)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Salida a fichero */
+draw_file(terminal=jpg);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$

@@ -1,0 +1,55 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/*Título:Diagrama de Tela de Araña */
+/*Descripción: uso del paquete "dynamics" para representar
+gráficamente la presencia de un RRF en la ecuación
+x_{k+1}=1/(x_k^2-1) */
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/*Función de iteración directa*/
+f(x):=1/(x^2-1)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/*Función de iteración inversa (rama positiva)*/
+h(x):=sqrt(1+1/x)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/*Cálculo del equilibrium */
+solve(x^3-x-1=0,x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/*Definición del equilibrium (tomamos la única raíz real)*/
+equilibrium:(sqrt(23)/(2*3^(3/2))+1/2)^(1/3)+1/(3*(sqrt(23)/(2*3^(3/2))+1/2)^(1/3));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Condición inicial que verifica la definición de RRF */
+inicial:h(h(h(-h(equilibrium))));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Carga del paquete "dynamics" */
+load("dynamics")$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Diagrama de tela de araña */
+staircase(f(x),inicial,5,[xlabel,"x(k)"],[ylabel,"x(k+1)"]);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$

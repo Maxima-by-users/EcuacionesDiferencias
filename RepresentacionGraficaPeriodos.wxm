@@ -1,0 +1,81 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* Título: representación gráfica de periodos */
+/* Descripción: para cada p, se determinan las soluciones
+reales de la ecuación f^p(x)=x y se dibujan éstas en la vertical
+de la longitud del periodo */
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Parámetro para que el procedimiento "algsys" solo calcule
+raíces reales */
+realonly:true$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Carga del paquete gráfico "draw" */
+load("draw")$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Función de iteración */
+f(x):=1/(x^2-1)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Función iterada */
+iteraF(x,nIter):=(
+aux:x,
+for i:1 thru nIter do aux:f(aux),
+aux)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Cálculo de periodos */
+periodos(p):=algsys([iteraF(x,p)=x],[x])$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Dibujo de periodos */
+dibujaPeriodos(p):=(
+    lista_aux:[],
+    lista_puntos:[],
+    lista_periodos:[],
+    for i:1 thru p do (
+        lista_periodos:periodos(i),
+        lista_aux:[],
+        for j:1 thru length(lista_periodos) do lista_aux:append(lista_aux,[[i,subst(lista_periodos[j],x)]]),
+        lista_puntos:append(lista_puntos,lista_aux)
+    ),
+    draw2d(
+        point_size=1.5,color=magenta,point_type=circle,
+        xrange=[0,p+1],yrange=[-3,3],
+        xlabel="Longitud del periodo",
+        ylabel="Posición de los periodos",
+        points(lista_puntos))
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Llamada al procedimiento */
+dibujaPeriodos(8)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Exportación del gráfico a un archivo */
+draw_file(terminal=png);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$

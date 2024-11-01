@@ -1,0 +1,65 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* Título: Conjunto prohibido analizado mediante recursión
+funcional.*/
+/* Descripción: Representación de las primeras curvas
+algebraicas que constituyen el conjunto prohibido de una EDR.
+Debido a la complejidad creciente de las iteraciones optamos
+por dibujar solo los diez primeros elementos paramétricamente.
+*/
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Valor del parámetro */
+p:-2$
+/* Rango de valores en la representación paramétrica */
+xMin:0$
+xMax:5$
+/* Número de curvas */
+nFunc:10$
+/* Desdoblamiento inverso */
+G(a):=[a[1]*(a[2]-p),a[1]]$
+/* Construcción de las iteradas y sustitución de la variable
+"y" por cero */
+aux:[x,y]$
+funciones:[]$
+for i:1 thru nFunc do (
+    aux:G(aux),
+    yIgualCero:subst(0,y,aux),
+    funciones:append([yIgualCero],funciones)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Función auxiliar para el dibujo paramétrico */
+funcionParametrica(expresion):=parametric(expresion[1],expresion[2],x,xMin,xMax)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Carga del paquete gráfico "draw" */
+load("draw")$
+/* Dibujo */
+draw2d(
+    title="p=-2",
+    xrange=[0,5],
+    yrange=[0,3],
+    /* Es importante un valor alto de nticks */
+    nticks=500,
+    maplist(funcionParametrica,funciones)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Salida a fichero */
+draw_file(terminal=jpg)$
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$

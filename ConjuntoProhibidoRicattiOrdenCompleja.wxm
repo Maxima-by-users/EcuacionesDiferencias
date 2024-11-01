@@ -1,0 +1,31 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* Título: Conjunto prohibido de la ecuación de Riccati de orden
+uno compleja */
+/* Descripción: mediante el algoritmo evolution2d del paquete
+dynamics representamos el conjunto prohibido de la ecuación de
+Riccati de orden uno cuando parámetros y condiciones iniciales
+son números complejos */
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Carga del paquete dynamics */
+load("dynamics")$
+/* Número de iteraciones */
+nIter:5000$
+/* Componentes de beta */
+a:sqrt(2)/2$
+b:sqrt(2)/2$
+/* Componentes de la función de iteración retrógrada */
+f:(x-a)/((x-a)^2+(y-b)^2)$
+g:(b-y)/((x-a)^2+(y-b)^2)$
+/* Algoritmo evolution. La condición inicial es el polo 0+0i*/
+evolution2d([f,g],[x,y],[0,0],nIter);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$

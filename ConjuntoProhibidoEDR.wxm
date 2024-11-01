@@ -1,0 +1,123 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* Título: Conjunto prohibido de una EDR de orden 2 con
+invariante */
+/* Descripción: cálculo numérico y gráfico de la expresión
+explícita de un conjunto prohibido determinado mediante el
+uso de un invariante algebraico */
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Carga del paquete "draw" */
+load("draw")$
+/* Parámetro B */
+B:2$
+/* Número de elementos en el segundo y tercer conjuntos */
+nElem:100$
+/* Número de elementos "D" */
+nElemD:100$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Primer conjunto */
+conjUno:[0,-1/B]$
+/* Segundo conjunto */
+conjDos:makelist([-(k+1)/(B*k),-1/B],k,1,nElem)$
+/* Tercer conjunto */
+conjTres:makelist([-1/B,-(k+1)/(B*k)],k,1,nElem)$
+/* Cuarto conjunto; para su construcción necesitamos tres
+funciones auxiliares que a su vez dependen de un
+parámetro "D" */
+conjAuxUno(D,k):=-2/B*(
+ ((1+sqrt(1-4/D))^(k-1)-(1-sqrt(1-4/D))^(k-1))/
+ ((1+sqrt(1-4/D))^(k)-(1-sqrt(1-4/D))^(k))
+ )+(D-1)/B$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+conjAuxDos(D,k):=-D/B*(
+ 1-sqrt(4/D-1)/tan(k*acos(sqrt(D)/2))
+ )+(D-1)/B$
+ conjAuxTres(k):=-2/B*(k-1)/k+3/B$
+ conjCuatro:[]$
+ /* Valores de D en (-infty,4) */
+ for k:1 thru nElem do (
+    for j:0 thru nElemD do (
+        D:-0.1-j,
+        a:conjAuxUno(D,k),
+        conjCuatro:append([[a,(D*B*a-B*a-1)/(B^2*a+B)]],conjCuatro)
+    )
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Valores de D en (4,infty) */
+for k:1 thru nElem do (
+    for j:0 thru nElemD do (
+        D:4.1+j,
+        a:conjAuxUno(D,k),
+        conjCuatro:append([[a,(D*B*a-B*a-1)/(B^2*a+B)]],conjCuatro)
+    )
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Valores de D en (0,4) */
+for k:1 thru nElem do (
+    for j:0 thru nElemD-1 do (
+        D:0.1+j*3.9/nElemD,
+        a:conjAuxDos(D,k),
+        conjCuatro:append([[a,(D*B*a-B*a-1)/(B^2*a+B)]],conjCuatro)
+    )
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Caso D=0,4 */
+for k:1 thru nElem do (
+    a:conjAuxTres(k),
+    conjCuatro:append([[a,(3*B*a-1)/(B^2*a+B)]],conjCuatro)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Área de dibujo */
+xRango:5$
+yRango:5$
+/* Representación gráfica */
+draw2d(
+    title="B=2",
+    xrange=[-xRango,xRango],
+    yrange=[-yRango,yRango],
+    point_type=0, /* bullet=7, dot=0 */
+    color=green,
+    points(conjCuatro),
+    color=red,
+    point_size=1,
+    point_type=7,
+    points(conjUno),
+    color=blue,
+    points(conjDos),
+    color=yellow,
+    points(conjTres)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Salida a fichero */
+draw_file(terminal=jpg)$
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$

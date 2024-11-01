@@ -1,0 +1,156 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+ /* Título: Cadenas Monótonas */
+ /* Descripción: Genera un número dado de términos de una
+ */
+ /* sucesión recurrente. Después construye una sucesión que */
+ /* indica la longitud de cada cadena creciente, decreciente */
+ /* o constante dentro de la sucesión. Esto se consigue en */
+ /* dos etapas: calculando primero las diferencias
+ */
+ /* consecutivas de términos y contando a continuación los */
+ /* positivos, negativos o nulos en ellas. */
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Sucesión recurrente, definición */
+suc[1]:1$
+suc[2]:1$
+suc[3]:1$
+suc[k]:=1/(suc[k-1]+suc[k-3])$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Procedimiento que cuenta los positivos, negativos o */
+/* nulos en una sucesión */
+contarPositivosNegativosCero[sucesion]:=(
+    resultado:[],
+    aux:1,
+    for k:2 thru length(sucesion)-1 do (
+        if (sucesion[k]=0 and sucesion[k-1]=0) then aux:aux+1,
+        if (sucesion[k]=0 and sucesion[k-1]>0) then (
+            resultado:append(resultado,[aux]),
+            aux:1
+        ),
+        if (sucesion[k]=0 and sucesion[k-1]<0) then (
+            resultado:append(resultado,[aux]),
+            aux:1
+        ),
+        if (sucesion[k]>0 and sucesion[k-1]=0) then (
+            resultado:append(resultado,[aux]),
+            aux:1
+        ),
+        if (sucesion[k]>0 and sucesion[k-1]>0) then aux:aux+1,
+        if (sucesion[k]>0 and sucesion[k-1]<0) then (
+            resultado:append(resultado,[aux]),
+            aux:1
+        ),
+        if (sucesion[k]<0 and sucesion[k-1]=0) then (
+            resultado:append(resultado,[aux]),
+            aux:1
+        ),
+        if (sucesion[k]<0 and sucesion[k-1]>0) then (
+            resultado:append(resultado,[aux]),
+            aux:1
+        ),
+        if (sucesion[k]<0 and sucesion[k-1]<0) then aux:aux+1
+    ),
+    /* Último término */
+    k:length(sucesion),
+    if (sucesion[k]=0 and sucesion[k-1]=0) then resultado:append(resultado,[aux+1]),
+    if (sucesion[k]=0 and sucesion[k-1]>0) then resultado:append(resultado,[aux,1]),
+    if (sucesion[k]=0 and sucesion[k-1]<0) then resultado:append(resultado,[aux,1]),
+    if (sucesion[k]>0 and sucesion[k-1]=0) then resultado:append(resultado,[aux,1]),
+    if (sucesion[k]>0 and sucesion[k-1]>0) then resultado:append(resultado,[aux+1]),
+    if (sucesion[k]>0 and sucesion[k-1]<0) then resultado:append(resultado,[aux,1]),
+    if (sucesion[k]<0 and sucesion[k-1]=0) then resultado:append(resultado,[aux,1]),
+    if (sucesion[k]<0 and sucesion[k-1]>0) then resultado:append(resultado,[aux,1]),
+    if (sucesion[k]<0 and sucesion[k-1]<0) then resultado:append(resultado,[aux+1]),
+    /* Salida de resultados */
+    resultado
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Diferencias */
+diferenciasSucesivas[sucesion]:=(
+cadena:[],
+for k:2 thru length(sucesion) do cadena:append(cadena,[sucesion[k]-sucesion[k-1]]),
+cadena
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Procedimiento principal */
+cadenasMonotonas[sucesion]:=(
+resultado:contarPositivosNegativosCero[diferenciasSucesivas[sucesion]],
+resultado
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Aplicación a la ecuación en diferencias */
+sucesion:makelist(suc[k],k,1,1000),numer$
+cadenasMonotonas[sucesion];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Subsucesión de términos de índice impar */
+impares[sucesion]:=(
+cadena:[],
+for k:1 thru floor(length(sucesion)/2) do cadena:append(cadena,[sucesion[2*k-1]]),
+cadena
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Aplicación del método a la subsucesión de impares */
+sucesion:makelist(suc[k],k,1,1000),numer$
+monotoniaImpar:cadenasMonotonas[impares[sucesion]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Aplicación del método a la subsucesión de pares */
+sucesion:makelist(suc[k],k,2,1001),numer$
+monotoniaPar:cadenasMonotonas[impares[sucesion]];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Parte gráfica: representación de las listas anteriores */
+xvalsI:makelist(k,k,1,length(monotoniaImpar))$
+plot2d(
+    [discrete,xvalsI,monotoniaImpar],
+    [color,blue,green],
+    [legend,"Impares"],
+    [xlabel,"Subíndice de la cadena monótona"],
+    [ylabel,"Longitud de la cadena"]
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+ /* Parte gráfica: representación de las listas anteriores */
+ xvalsP:makelist(k,k,1,length(monotoniaPar))$
+ plot2d(
+    [discrete,xvalsP,monotoniaPar],
+    [color,green],
+    [legend,"Pares"],
+    [xlabel,"Subíndice de la cadena monótona"],
+    [ylabel,"Longitud de la cadena"]
+);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$

@@ -1,0 +1,62 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* Título: Conjunto prohibido de x_{k+1}=1/(x_k^2-r) */
+/* Descripción: Dibujo del conjunto prohibido sobre los
+números reales utilizando barras verticales */
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Valor del parámetro */
+r:1$
+/* Rama positiva */
+iteracionInversa(x):=sqrt(1/x+r)$
+/* Función de iteración */
+nestList(inicial,nIter):=(
+    aux:inicial,
+    listaAux:[aux],
+    for i:1 thru nIter do (
+        aux:iteracionInversa(aux),
+        listaAux:append(listaAux,[aux])
+    ),
+    listaAux
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Carga del paquete gráfico */
+load(draw)$
+/* Número de elementos */
+nIter:20$
+/* Ancho de las barras */
+ancho:0.0005$
+/* Generación de los elementos de P */
+lista:nestList(sqrt(r),nIter)$
+/* Ahora añadimos la rama negativa, que solo puede
+aplicarse una vez sin salirnos al campo complejo */
+signoMenos(x):=-x$
+lista:append(lista,maplist(signoMenos,lista))$
+barras:create_list([i,j,k],i,lista,j,[1],k,[ancho])$
+/* Dibujo */
+draw2d(
+    title="r=1",
+    fill_color=blue,
+    xrange=[-2,2],
+    yrange=[0,1.25],
+    fill_density=0.6,
+    maplist(bars,barras)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Salida a fichero */
+draw_file(terminal=jpg)$
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$

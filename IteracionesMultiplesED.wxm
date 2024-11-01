@@ -1,0 +1,66 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* Título: Iteraciones múltiples de una ED */
+/* Descripción: calculamos los primeros términos de las
+soluciones de una ecuación en diferencias generadas a partir
+de 100 condiciones iniciales distintas.
+Representamos gráficamente los resultados para estimar el
+comportamiento de la ED. */
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Función de iteración */
+f(x):=1/(x^2-1)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Procedimiento para iterar */
+iteraciones(inicial,nIter):=(
+aux:inicial,
+for i:1 thru nIter do aux:f(aux),
+aux
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Funciones iteradas */
+a(x):=iteraciones(x,1)$
+b(x):=iteraciones(x,5)$
+c(x):=iteraciones(x,10)$
+d(x):=iteraciones(x,17)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Número de condiciones iniciales */
+nPuntos:100;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Dibujo simultáneo de las cuatro funciones */
+plot2d(
+[
+[parametric,t,a(t),[t,-5,5],[nticks,nPuntos]],
+[parametric,t,b(t),[t,-5,5],[nticks,nPuntos]],
+[parametric,t,c(t),[t,-5,5],[nticks,nPuntos]],
+[parametric,t,d(t),[t,-5,5],[nticks,nPuntos]]
+],
+[x,-5,5],
+[y,-10,10],
+[style,points],
+[point_type,bullet,circle,diamond,square],
+[legend,
+"1 iteración","5 iteraciones",
+"10 iteraciones","17 iteraciones"]
+);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$

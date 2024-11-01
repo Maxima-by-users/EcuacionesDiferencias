@@ -1,0 +1,30 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* Título: Cálculo de periodos de la EDR
+x_{k+1}=1/(x_{k-2}+x_k) */
+/* Descripción: uso de algsys para determinar
+los periodos de una EDR de orden tres */
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Caso p=3 */
+/* Función de iteración */
+f(x,y,z):=1/(x+z)$
+/* Desdoblamiento */
+desF(a):=[a[2],a[3],f(a[1],a[2],a[3])]$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/*Iteraciones*/
+tresIteradas:desF(desF(desF([x,y,z])))$
+/*Cálculo de periodos*/
+algsys([tresIteradas[1]=x,tresIteradas[2]=y,tresIteradas[3]=z],[x,y,z]);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$

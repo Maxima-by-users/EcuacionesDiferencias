@@ -1,0 +1,116 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 22.04.0 ] */
+/* [wxMaxima: input   start ] */
+/* Título: Conjunto prohibido de la ecuación de
+Riccati de orden uno */
+/* Descripción: Generamos cuatro gráficos con barras
+verticales para ilustrar distintos conjuntos
+prohibidos de la ecuación de Riccati de orden uno */
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Primer conjunto */
+load(draw)$
+R:3/16$
+a:(1-sqrt(1-4*R))/2$
+b:(1+sqrt(1-4*R))/2$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Descripción explícita del conjunto prohibido */
+p(n):=(a*b*(b^(n-1)-a^(n-1)))/(b^(n)-a^(n))$
+/* Ancho de las barras */
+ancho:0.0005$
+/* Número de elementos del conjunto prohibido */
+nPasos:10$
+lista:makelist(p(n),n,1,nPasos)$
+barras:create_list([i,j,k],i,lista,j,[1],k,[ancho])$
+draw2d(
+    title="R=3/16",
+    fill_color=blue,
+    xrange=[-0.1,0.5],
+    yrange=[0,1.25],
+    fill_density=0.6,
+    maplist(bars,barras)
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Segundo conjunto */
+R:1/4$
+p(n):=(n-1)/(2*n)$
+ancho:0.0005$
+nPasos:100$
+lista:makelist(p(n),n,1,nPasos)$
+barras:create_list([i,j,k],i,lista,j,[1],k,[ancho])$
+draw2d(
+    title="R=1/4",
+    fill_color=blue,
+    xrange=[-0.1,0.6],
+    yrange=[0,1.25],
+    fill_density=0.6,
+    maplist(bars,barras)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Tercer conjunto */
+R:1.1$
+angulo:acos(1/(2*sqrt(R)));
+p(n):=1/2-1/2*sqrt(4*R-1)/tan(n*angulo)$
+ancho:0.0005$
+nPasos:2500$
+lista:makelist(p(n),n,1,nPasos)$
+barras:create_list([i,j,k],i,lista,j,[1],k,[ancho])$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+draw2d(
+    title="R=1.1",
+    fill_color=blue,
+    xrange=[-0.1,0.5],
+    yrange=[0,1.25],
+    fill_density=0.6,
+    maplist(bars,barras)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Cuarto conjunto */
+R:1/3$
+angulo:acos(1/(2*sqrt(R)));
+/* Modificación de la descripción explícita del conjunto
+prohibido en la que se incluye la posible división
+entre cero */
+p(n):=if cos(n*angulo)*sin(n*angulo)=0 then 0 else
+1/2-1/2*sqrt(4*R-1)/tan(n*angulo)$
+ancho:0.0005$
+nPasos:1000$
+lista:makelist(p(n),n,1,nPasos)$
+barras:create_list([i,j,k],i,lista,j,[1],k,[ancho])$
+draw2d(
+    title="R=1/3",
+    fill_color=blue,
+    xrange=[-1,2],
+    yrange=[0,1.25],
+    fill_density=0.6,
+    maplist(bars,barras)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+/* Comando para salida a fichero */
+draw_file(terminal=jpg);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 22.04.0"$
